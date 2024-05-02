@@ -1,7 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {ChildComponentComponent} from "./child-component/child-component.component";
 import {BehaviorSubject, interval, Observable, Subject, Subscription, takeUntil} from "rxjs";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,9 @@ import {BehaviorSubject, interval, Observable, Subject, Subscription, takeUntil}
 export class AppComponent implements OnInit, OnDestroy {
 
   timerSub: Subscription | undefined;
-  model: Array<PriceData> | undefined;
+  // model: Array<PriceData> | undefined;
   private readonly _destroying$ = new Subject<void>();
+  priceData = signal<Array<PriceData>>([]);
 
   ngOnDestroy(): void {
     this._destroying$.next(undefined);
@@ -26,24 +28,25 @@ export class AppComponent implements OnInit, OnDestroy {
     this.timerSub = interval(1000)
       .pipe(takeUntil(this._destroying$))
       .subscribe(x => {
-      this.model = [
-        {
-          name: "The book of cat photos",
-          price: getRandomArbitrary(5, 15)
-        },
-        {
-          name: "How to pat a cat",
-          price: getRandomArbitrary(10, 40)
-        },
-        {
-          name: "Cat Photography: A Short Guide",
-          price: getRandomArbitrary(12, 20),
-        },
-        {
-          name: "Understanding Cat Body Language: A Cautionary Tale",
-          price: getRandomArbitrary(2, 15)
-        }
-      ]
+        this.priceData.set([
+          {
+            name: "The book of cat photos",
+            price: getRandomArbitrary(5, 15)
+          },
+          {
+            name: "How to pat a cat",
+            price: getRandomArbitrary(10, 40)
+          },
+          {
+            name: "Cat Photography: A Short Guide",
+            price: getRandomArbitrary(12, 20),
+          },
+          {
+            name: "Understanding Cat Body Language: A Cautionary Tale",
+            price: getRandomArbitrary(2, 15)
+          }
+        ])
+      // this.model =
     });
   }
 

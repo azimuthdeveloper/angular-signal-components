@@ -1,10 +1,10 @@
 <div style="padding: 10px; border: 1px solid black; display: flex; flex-wrap: wrap;">
-  @for (item of data; track $index){
-    <div style="flex: 1 1 200px; padding: 10px; border: 1px solid black; margin: 5px; display: flex; flex-direction: column; justify-content: space-between;" [ngClass]="(priceDelta[$index] ?? 0) > 0 ? 'increasing' : 'decreasing'">
-      <h3>{{item.name}}</h3>
-      <p>Price: {{item.price}}</p>
+  @for (item of prices(); track $index){
+    <div style="flex: 1 1 200px; padding: 10px; border: 1px solid black; margin: 5px; display: flex; flex-direction: column; justify-content: space-between;" [ngClass]="(priceDifferences()[$index]?.change ?? 0) > 0 ? 'increasing' : 'decreasing'">
+      <h3>{{item?.name}}</h3>
+      <p>Price: {{item?.price}}</p>
 
-      <b>Difference: {{priceDelta[$index] ?? 0}}</b>
+      <b>Difference: {{priceDifferences()[$index]?.change}}</b>
     </div>
   }
 </div>
